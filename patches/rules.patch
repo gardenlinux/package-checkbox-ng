@@ -1,0 +1,25 @@
+--- a/debian/rules
++++ b/debian/rules
+@@ -11,11 +11,11 @@ export SRCTOP=checkbox-ng
+ # This is not a valid python version, remove the ~ubuntu(ubuntu_version)
+ # replace ~dev -> .dev as PEP440 mandates
+ DEBVER := $(shell dpkg-parsechangelog -SVersion)
+-PYTHON_VERSION := $(shell echo $(DEBVER) | sed 's/.ubuntu.\+//' | sed 's/~dev/.dev/')
++PYTHON_VERSION := $(shell echo $(DEBVER) | sed 's/.ubuntu.\+//' | sed 's/gl[0-9]//')
+ export SETUPTOOLS_SCM_PRETEND_VERSION=$(PYTHON_VERSION)
+ 
+ %:
+-	dh $@ --sourcedirectory=$(SRCTOP) --with=python3 --buildsystem=pybuild
++	dh $@ --with=python3 --buildsystem=pybuild
+ 
+ # Override dh_install to ensure that console_scripts are in the
+ # checkbox-ng package and not in the python3-checkbox-ng package.
+@@ -26,7 +26,7 @@ override_dh_install:
+ 	mkdir -p debian/checkbox-ng/usr/bin
+ 	mkdir -p debian/python3-checkbox-ng/usr/share/python3-checkbox-ng/
+ 	mv debian/python3-checkbox-ng/usr/bin/checkbox-cli debian/checkbox-ng/usr/bin
+-	cp -R $(SRCTOP)/plainbox/test-data debian/python3-checkbox-ng/usr/share/python3-checkbox-ng/
++	cp -R plainbox/test-data debian/python3-checkbox-ng/usr/share/python3-checkbox-ng/
+ 	find debian/python3-checkbox-ng -type d -empty -delete
+ 	rm -rf $(foreach version,$(shell py3versions -s), debian/python3-checkbox-ng/usr/lib/$(version)/dist-packages/plainbox/data)
+ 	rm -rf $(foreach version,$(shell py3versions -s), debian/python3-checkbox-ng/usr/lib/$(version)/dist-packages/plainbox/test-data)
