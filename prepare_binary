@@ -1,0 +1,2 @@
+# dh pybuild fails with --quiet, so we're removing terse
+export DEB_BUILD_OPTIONS="nocheck nodoc noudeb"
